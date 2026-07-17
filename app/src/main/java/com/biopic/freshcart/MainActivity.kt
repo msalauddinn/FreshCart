@@ -44,5 +44,8 @@ fun MainPage() {
         composable(route = "SignUpScreen") {
             SignUpScreen(navController)
         }
+        composable(route = "ForgotPasswordScreen") {
+            ForgotPasswordScreen()
+        }
     }
 }
