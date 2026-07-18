@@ -1,5 +1,7 @@
 package com.biopic.freshcart
 
+import android.util.Patterns
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,6 +31,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +45,7 @@ import androidx.navigation.NavController
 import com.biopic.freshcart.ui.theme.Black
 import com.biopic.freshcart.ui.theme.DodgerBlue
 import com.biopic.freshcart.ui.theme.Grey
+import com.biopic.freshcart.ui.theme.Red
 import com.biopic.freshcart.ui.theme.RoyalBlue
 import com.biopic.freshcart.ui.theme.White
 
@@ -55,6 +60,21 @@ fun LogInScreen(navController: NavController) {
     val isPasswordVisible = remember {
         mutableStateOf(false)
     }
+    val isButtonClicked = remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
+    val user = readData(context) // Read data from the local storage
+
+    val validEmail = isValidEmail(emailText.value)
+    val validPassword = isValidPassword(passwordText.value)
+
+    val toastNoAccount = stringResource(R.string.no_account)
+    val toastUserNotExist = stringResource(R.string.user_not_exist)
+    val errorToast = stringResource(R.string.error_toast_signUp)
+    val confirmToast = stringResource(R.string.confirm_toast_logIn)
 
     Column(
         modifier = Modifier
@@ -90,7 +110,11 @@ fun LogInScreen(navController: NavController) {
                 unfocusedTextColor = Black,
 
                 focusedIndicatorColor = Black,
-                unfocusedIndicatorColor = Black
+                unfocusedIndicatorColor = Black,
+
+                errorContainerColor = White,
+                errorTextColor = Black,
+                errorIndicatorColor = Red
             ),
             placeholder = {
                 Text(
@@ -106,7 +130,8 @@ fun LogInScreen(navController: NavController) {
                     tint = Grey
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            isError = !validEmail && isButtonClicked.value
         )
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -128,7 +153,11 @@ fun LogInScreen(navController: NavController) {
                 unfocusedTextColor = Black,
 
                 focusedIndicatorColor = Black,
-                unfocusedIndicatorColor = Black
+                unfocusedIndicatorColor = Black,
+
+                errorContainerColor = White,
+                errorIndicatorColor = Red,
+                errorTextColor = Black
             ),
             placeholder = {
                 Text(
@@ -151,7 +180,8 @@ fun LogInScreen(navController: NavController) {
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (isPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation()
+            visualTransformation = if (isPasswordVisible.value) VisualTransformation.None else PasswordVisualTransformation(),
+            isError = !validPassword && isButtonClicked.value
         )
 
         // Forgot password text
@@ -161,7 +191,7 @@ fun LogInScreen(navController: NavController) {
         ) {
             TextButton(
                 onClick = {
-                    navController.navigate("ForgotPasswordScreen")
+                    navController.navigate(Screen.FORGOTPASSWORD)
                 }
             ) {
                 Text(
@@ -176,7 +206,18 @@ fun LogInScreen(navController: NavController) {
         // Log in Button
         Button(
             onClick = {
-
+                focusManager.clearFocus()
+                isButtonClicked.value = true
+                if (!validEmail || !validPassword) Toast.makeText(context, errorToast, Toast.LENGTH_SHORT).show()
+                if (user == null) Toast.makeText(context, toastNoAccount, Toast.LENGTH_SHORT).show()
+                else {
+                    if (user.email == emailText.value && user.password == passwordText.value) {
+                        Toast.makeText(context, confirmToast, Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        Toast.makeText(context, toastUserNotExist, Toast.LENGTH_SHORT).show()
+                    }
+                }
             },
             modifier = Modifier
                 .fillMaxWidth(0.84f)
@@ -208,7 +249,7 @@ fun LogInScreen(navController: NavController) {
                 )
                 TextButton(
                     onClick = {
-
+                        navController.navigate(Screen.SIGNUP)
                     }
                 ) {
                     Text(

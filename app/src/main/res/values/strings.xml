@@ -7,4 +7,14 @@
     <string name="logIn">Log In</string>
     <string name="have_account">Don’t have an account?</string>
     <string name="create">Create one?</string>
+    <string name="namePlaceHolder">Enter your name</string>
+    <string name="password_placeholder">Enter password</string>
+    <string name="confirm_placeholder">Confirm password</string>
+    <string name="signUp">Sign Up</string>
+    <string name="password_match">Password not matched</string>
+    <string name="error_toast_signUp">Please enter valid details</string>
+    <string name="confirm_toast_signUp">User Created Successfully</string>
+    <string name="confirm_toast_logIn">Log in Successful</string>
+    <string name="no_account">Don\'t have an account</string>
+    <string name="user_not_exist">User does not exist</string>
 </resources>

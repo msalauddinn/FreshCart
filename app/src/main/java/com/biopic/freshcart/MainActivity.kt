@@ -36,15 +36,15 @@ fun MainPage() {
 
     NavHost(
         navController = navController,
-        startDestination = "LogInScreen"
+        startDestination = Screen.LOGIN
     ) {
-        composable(route = "LogInScreen") {
+        composable(route = Screen.LOGIN) {
             LogInScreen(navController)
         }
-        composable(route = "SignUpScreen") {
+        composable(route = Screen.SIGNUP) {
             SignUpScreen(navController)
         }
-        composable(route = "ForgotPasswordScreen") {
+        composable(route = Screen.FORGOTPASSWORD) {
             ForgotPasswordScreen()
         }
     }
