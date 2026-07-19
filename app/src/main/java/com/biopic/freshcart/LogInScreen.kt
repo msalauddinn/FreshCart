@@ -212,6 +212,9 @@ fun LogInScreen(navController: NavController) {
                 if (user == null) Toast.makeText(context, toastNoAccount, Toast.LENGTH_SHORT).show()
                 else {
                     if (user.email == emailText.value && user.password == passwordText.value) {
+                        navController.navigate(route = Screen.mainScreenRoute(name = user.name)) {
+                            popUpTo(route = Screen.LOGIN) { inclusive = true }
+                        }
                         Toast.makeText(context, confirmToast, Toast.LENGTH_SHORT).show()
                     }
                     else {

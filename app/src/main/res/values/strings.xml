@@ -17,4 +17,6 @@
     <string name="confirm_toast_logIn">Log in Successful</string>
     <string name="no_account">Don\'t have an account</string>
     <string name="user_not_exist">User does not exist</string>
+    <string name="welcome">Welcome,</string>
+    <string name="search_placeHolder">Search here</string>
 </resources>
