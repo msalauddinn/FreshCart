@@ -7,15 +7,15 @@ import java.io.ObjectOutputStream
 
 const val FILE_NAME = "freshcart.txt"
 
-fun writeData(user : User?, context : Context) {
+fun writeData(user : User, context : Context) {
     val fos = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE)
     val oos = ObjectOutputStream(fos)
     oos.writeObject(user)
     oos.close()
 }
 
-fun readData(context: Context) : User? {
-    var user : User?
+fun readData(context: Context) : User {
+    var user : User
 
     try {
         val fis = context.openFileInput(FILE_NAME)
@@ -23,7 +23,7 @@ fun readData(context: Context) : User? {
         user = ois.readObject() as User
         ois.close()
     } catch (e : FileNotFoundException) {
-        return null
+        return User("", "", "")
     }
 
     return user

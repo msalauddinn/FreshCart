@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,10 +36,12 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainPage() {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val session = readSessionData(context)
 
     NavHost(
         navController = navController,
-        startDestination = Screen.LOGIN
+        startDestination = if (session.isLoggedIn) Screen.MAINSCREEN else Screen.LOGIN
     ) {
         composable(route = Screen.LOGIN) {
             LogInScreen(navController)
@@ -49,18 +52,8 @@ fun MainPage() {
         composable(route = Screen.FORGOTPASSWORD) {
             ForgotPasswordScreen()
         }
-        composable(
-            route = Screen.MAINSCREEN_ROUTE,
-            arguments = listOf(
-                navArgument(name = "name") {
-                    type = NavType.StringType
-                }
-            )
-        ) { backStackEntry ->
-            val name = backStackEntry.arguments?.getString("name")
-            name?.let {
-                MainScreen(navController, name)
-            }
+        composable(route = Screen.MAINSCREEN) {
+            MainScreen(navController)
         }
     }
 }

@@ -43,7 +43,8 @@ fun HomeScreen(name : String, topBarBehavior : TopAppBarScrollBehavior) {
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = White,
-            titleContentColor = Black
+            titleContentColor = Black,
+            scrolledContainerColor = White,
         ),
         modifier = Modifier
             .border(1.dp, Gray30),

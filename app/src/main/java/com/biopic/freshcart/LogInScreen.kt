@@ -1,6 +1,5 @@
 package com.biopic.freshcart
 
-import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -66,12 +65,11 @@ fun LogInScreen(navController: NavController) {
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val user = readData(context) // Read data from the local storage
+    val user = readData(context) // Read data from the local storage about user
 
     val validEmail = isValidEmail(emailText.value)
     val validPassword = isValidPassword(passwordText.value)
 
-    val toastNoAccount = stringResource(R.string.no_account)
     val toastUserNotExist = stringResource(R.string.user_not_exist)
     val errorToast = stringResource(R.string.error_toast_signUp)
     val confirmToast = stringResource(R.string.confirm_toast_logIn)
@@ -208,19 +206,20 @@ fun LogInScreen(navController: NavController) {
             onClick = {
                 focusManager.clearFocus()
                 isButtonClicked.value = true
-                if (!validEmail || !validPassword) Toast.makeText(context, errorToast, Toast.LENGTH_SHORT).show()
-                if (user == null) Toast.makeText(context, toastNoAccount, Toast.LENGTH_SHORT).show()
-                else {
+                if (validEmail && validPassword) {
                     if (user.email == emailText.value && user.password == passwordText.value) {
-                        navController.navigate(route = Screen.mainScreenRoute(name = user.name)) {
+                        navController.navigate(route = Screen.MAINSCREEN) {
                             popUpTo(route = Screen.LOGIN) { inclusive = true }
                         }
                         Toast.makeText(context, confirmToast, Toast.LENGTH_SHORT).show()
+                        val session = Session(true)
+                        writeSessionData(session, context)
                     }
                     else {
                         Toast.makeText(context, toastUserNotExist, Toast.LENGTH_SHORT).show()
                     }
                 }
+                else Toast.makeText(context, errorToast, Toast.LENGTH_SHORT).show()
             },
             modifier = Modifier
                 .fillMaxWidth(0.84f)

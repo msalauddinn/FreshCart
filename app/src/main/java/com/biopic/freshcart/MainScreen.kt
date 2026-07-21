@@ -1,13 +1,9 @@
 package com.biopic.freshcart
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.biopic.freshcart.ui.theme.Black
@@ -40,25 +37,27 @@ import com.biopic.freshcart.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, name : String) {
+fun MainScreen(navController: NavController) {
     val currentScreen = remember {
         mutableStateOf("HOME")
     }
     val productList = rememberProducts()
     val topBarBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val context = LocalContext.current
+    val user = readData(context)
 
     val isHome = currentScreen.value == "HOME"
     val isCategory = currentScreen.value == "CATEGORY"
     val isAccount = currentScreen.value == "ACCOUNT"
     val isCart = currentScreen.value == "CART"
-    val iconSize = 36.dp
+    val iconSize = 32.dp
 
     Scaffold(
         modifier = Modifier.nestedScroll(topBarBehavior.nestedScrollConnection),
         topBar = {
             when (currentScreen.value) {
                 "HOME" -> {
-                    HomeScreen(name, topBarBehavior)
+                    HomeScreen(user.name, topBarBehavior)
                 }
             }
         },
@@ -130,7 +129,7 @@ fun MainScreen(navController: NavController, name : String) {
             }
         },
         content = { paddingValues ->
-            if (isHome) ProductCard(navController, productList, paddingValues)
+            if (isHome) HomeScreenContent(navController, productList, paddingValues, currentScreen)
         }
     )
 }

@@ -1,6 +1,11 @@
 package com.biopic.freshcart
 
-data class Product(
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+
+class Product(
     val id : Int,
     val category : String,
     val name : String,
@@ -8,9 +13,13 @@ data class Product(
     val discount : Int,
     val originalPrice : Int,
     val unit : String,
-    val stock : Int,
+    stock : Int,
     val image : Int,
     val rating : Float,
     val smallDescription : String,
     val bigDescription : String
-)
+) {
+    var stock by mutableIntStateOf(stock)
+    var itemCount by mutableIntStateOf(1)
+    var isAddedCart by mutableStateOf(false)
+}
