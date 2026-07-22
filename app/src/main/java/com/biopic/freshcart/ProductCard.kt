@@ -19,8 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ShoppingCart
+import androidx.compose.material.icons.filled.ShoppingCartCheckout
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -64,7 +65,7 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
         border = BorderStroke(1.dp, Grey),
         shape = RoundedCornerShape(10.dp),
         onClick = {
-
+            navController.navigate(route = "${Screen.PRODUCT_DETAILS}/${product.id}")
         },
         content = {
             Column(
@@ -126,7 +127,7 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
                     }
                 )
                 Text(
-                    text = "Quantity : ${product.unit}",
+                    text = "${stringResource(R.string.quantity)} : ${product.unit}",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium
                 )
@@ -248,7 +249,7 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
                             }
                         ) {
                             Icon(
-                                imageVector = Icons.Outlined.AddShoppingCart,
+                                imageVector = if (!product.isAddedCart) Icons.Filled.ShoppingCartCheckout else Icons.Filled.ShoppingCart,
                                 contentDescription = "Add Cart",
                                 modifier = Modifier.size(24.dp, 24.dp),
                                 tint = if (!product.isAddedCart) Black else ForestGreen

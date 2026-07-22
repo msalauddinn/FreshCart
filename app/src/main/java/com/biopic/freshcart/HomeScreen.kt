@@ -1,7 +1,6 @@
 package com.biopic.freshcart
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api

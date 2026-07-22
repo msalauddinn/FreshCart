@@ -20,4 +20,9 @@
     <string name="welcome">Welcome,</string>
     <string name="search_placeHolder">Search here</string>
     <string name="out_of_stock">Out of Stock</string>
+    <string name="product_details">Product Details</string>
+    <string name="quantity">Quantity</string>
+    <string name="add_cart">Add to cart</string>
+    <string name="go_cart">Go to cart</string>
+    <string name="buy">Buy at</string>
 </resources>

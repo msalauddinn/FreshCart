@@ -38,6 +38,7 @@ fun MainPage() {
     val navController = rememberNavController()
     val context = LocalContext.current
     val session = readSessionData(context)
+    val productList = rememberProducts()
 
     NavHost(
         navController = navController,
@@ -53,7 +54,20 @@ fun MainPage() {
             ForgotPasswordScreen()
         }
         composable(route = Screen.MAINSCREEN) {
-            MainScreen(navController)
+            MainScreen(navController, productList)
+        }
+        composable (
+            route = "${Screen.PRODUCT_DETAILS}/{id}",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                }
+            )
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("id")
+            productId?.let { id ->
+                ProductDetails(navController,productList, id)
+            }
         }
     }
 }

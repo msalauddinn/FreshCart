@@ -22,4 +22,5 @@ class Product(
     var stock by mutableIntStateOf(stock)
     var itemCount by mutableIntStateOf(1)
     var isAddedCart by mutableStateOf(false)
+    var isFavorite by mutableStateOf(false)
 }
