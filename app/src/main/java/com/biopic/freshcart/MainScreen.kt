@@ -22,13 +22,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.biopic.freshcart.ui.theme.Black
@@ -38,13 +36,13 @@ import com.biopic.freshcart.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavController, productList : SnapshotStateList<Product>) {
-    val currentScreen = remember {
-        mutableStateOf("HOME")
-    }
+fun MainScreen(
+    navController: NavController,
+    productList : SnapshotStateList<Product>,
+    currentScreen : MutableState<String>,
+    user : User
+) {
     val topBarBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val context = LocalContext.current
-    val user = readData(context)
 
     val isHome = currentScreen.value == "HOME"
     val isCategory = currentScreen.value == "CATEGORY"
@@ -53,11 +51,15 @@ fun MainScreen(navController: NavController, productList : SnapshotStateList<Pro
     val iconSize = 32.dp
 
     Scaffold(
+        containerColor = White,
         modifier = Modifier.nestedScroll(topBarBehavior.nestedScrollConnection),
         topBar = {
             when (currentScreen.value) {
                 "HOME" -> {
                     HomeScreen(user.name, topBarBehavior)
+                }
+                "CATEGORY" -> {
+                    CategoryScreen()
                 }
             }
         },
@@ -129,7 +131,8 @@ fun MainScreen(navController: NavController, productList : SnapshotStateList<Pro
             }
         },
         content = { paddingValues ->
-            if (isHome) HomeScreenContent(navController, productList, paddingValues, currentScreen)
+            if (isHome) HomeScreenContent(navController, productList, paddingValues, currentScreen, user)
+            if (isCategory) CategoryScreenContent(navController, productList, paddingValues)
         }
     )
 }

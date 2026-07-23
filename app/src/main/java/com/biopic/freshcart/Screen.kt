@@ -6,4 +6,5 @@ object Screen{
     const val FORGOTPASSWORD = "ForgotPassword"
     const val MAINSCREEN = "MainScreen"
     const val PRODUCT_DETAILS = "ProductDetails"
+    const val CATEGORY_PRODUCT_SCREEN = "CategoryProductScreen"
 }

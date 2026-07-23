@@ -1,5 +1,6 @@
 package com.biopic.freshcart
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,218 +60,234 @@ import com.biopic.freshcart.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetails(navController : NavController, productList : SnapshotStateList<Product>, id : Int) {
-    val selectedProduct = productList[id-1]
+fun ProductDetails(navController: NavController, productList: SnapshotStateList<Product>, id: Int, user : User) {
+    val selectedProduct = productList.find { product ->
+        product.id == id
+    }
+    val context = LocalContext.current
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                modifier = Modifier.border(1.dp, Gray30),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = White,
-                    titleContentColor = Black,
+    if (selectedProduct != null) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    modifier = Modifier.border(1.dp, Gray30),
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = White,
+                        titleContentColor = Black,
 
-                    navigationIconContentColor = Black
-                ),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-                            navController.popBackStack()
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Arrow Back",
-                            modifier = Modifier
-                                .size(36.dp, 36.dp)
-                        )
-                    }
-                },
-                title = {
-                    Text(
-                        text = stringResource(R.string.product_details),
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.padding(start = 4.dp)
-                    )
-                }
-            )
-        },
-        bottomBar = {
-            BottomAppBar(
-                containerColor = White,
-                contentColor = Black ,
-                modifier = Modifier
-                    .border(1.dp, Gray30)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = {
-
-                        },
-                        modifier = Modifier
-                            .size(152.dp, 48.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = White,
-                            contentColor = Black
-                        ),
-                        shape = RoundedCornerShape(10.dp),
-                        border = BorderStroke(1.dp, Gray30)
-                    ) {
-                        Text(
-                            text = if (selectedProduct.isAddedCart) stringResource(R.string.go_cart) else stringResource(R.string.add_cart),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Button(
-                        onClick = {
-
-                        },
-                        modifier = Modifier
-                            .size(152.dp, 48.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = ButtonColor,
-                            contentColor = Black
-                        ),
-                        shape = RoundedCornerShape(10.dp)
-                    ) {
-                        Text(
-                            text = "${stringResource(R.string.buy)} ₹${selectedProduct.originalPrice}",
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                }
-            }
-        },
-        content = { paddingValues ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(White)
-                    .padding(paddingValues)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 28.dp, start = 54.dp, end = 54.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .size(332.dp, 332.dp)
-                            .clip(shape = RoundedCornerShape(10.dp))
-                            .border(1.dp, Black, RoundedCornerShape(10.dp)),
-                        content = {
-                            Image(
-                                painter = painterResource(selectedProduct.image),
-                                contentDescription = selectedProduct.name,
+                        navigationIconContentColor = Black
+                    ),
+                    navigationIcon = {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "Arrow Back",
                                 modifier = Modifier
-                                    .size(300.dp, 300.dp)
-                                    .align(Alignment.Center),
-                                contentScale = ContentScale.Fit,
-                                alignment = Alignment.Center
+                                    .size(36.dp, 36.dp)
                             )
-                            IconButton(
-                                onClick = {
-                                    selectedProduct.isFavorite = !selectedProduct.isFavorite
-                                },
-                                modifier = Modifier.align(Alignment.TopEnd)
-                            ) {
-                                Icon(
-                                    imageVector = if (selectedProduct.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                                    contentDescription = "Favorite",
-                                    tint = if (selectedProduct.isFavorite) Red else Black,
-                                    modifier = Modifier
-                                        .size(36.dp, 36.dp)
-                                        .padding(end = 12.dp, top = 12.dp)
-                                )
-                            }
-                            Row(
-                                modifier = Modifier
-                                    .width(60.dp)
-                                    .background(color = White)
-                                    .padding(start = 20.dp, bottom = 12.dp)
-                                    .align(Alignment.BottomStart),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "${selectedProduct.rating}",
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = Black
-                                )
-                                Icon(
-                                    imageVector = Icons.Filled.Star,
-                                    contentDescription = "Rating Star",
-                                    tint = ForestGreen,
-                                    modifier = Modifier
-                                        .size(16.dp, 16.dp)
-                                )
-                            }
                         }
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = "${stringResource(R.string.quantity)} : ${selectedProduct.unit}",
-                        fontWeight = FontWeight.Medium,
-                        color = Black
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = selectedProduct.name,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Black
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = selectedProduct.bigDescription,
-                        color = Black
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
+                    },
+                    title = {
+                        Text(
+                            text = stringResource(R.string.product_details),
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
+                )
+            },
+            bottomBar = {
+                BottomAppBar(
+                    containerColor = White,
+                    contentColor = Black,
+                    modifier = Modifier
+                        .border(1.dp, Gray30)
+                ) {
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowDownward,
-                            contentDescription = "ArrowDown",
-                            tint = ForestGreen,
-                            modifier = Modifier.size(28.dp, 28.dp)
+                        Button(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .size(152.dp, 48.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = White,
+                                contentColor = Black
+                            ),
+                            shape = RoundedCornerShape(10.dp),
+                            border = BorderStroke(1.dp, Gray30)
+                        ) {
+                            Text(
+                                text = if (selectedProduct.isAddedCart) stringResource(R.string.go_cart) else stringResource(
+                                    R.string.add_cart
+                                ),
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                        Button(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .size(152.dp, 48.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = ButtonColor,
+                                contentColor = Black
+                            ),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Text(
+                                text = "${stringResource(R.string.buy)} ₹${selectedProduct.originalPrice}",
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                }
+            },
+            content = { paddingValues ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(White)
+                        .padding(paddingValues)
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 28.dp, start = 54.dp, end = 54.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .size(332.dp, 332.dp)
+                                .clip(shape = RoundedCornerShape(10.dp))
+                                .border(1.dp, Black, RoundedCornerShape(10.dp)),
+                            content = {
+                                Image(
+                                    painter = painterResource(selectedProduct.image),
+                                    contentDescription = selectedProduct.name,
+                                    modifier = Modifier
+                                        .size(300.dp, 300.dp)
+                                        .align(Alignment.Center),
+                                    contentScale = ContentScale.Fit,
+                                    alignment = Alignment.Center
+                                )
+                                IconButton(
+                                    onClick = {
+                                        selectedProduct.isFavorite = !selectedProduct.isFavorite
+                                        if (selectedProduct.isFavorite) {
+                                            user.favoriteProducts.add(selectedProduct.id)
+                                        }
+                                        else {
+                                            user.favoriteProducts.remove(selectedProduct.id)
+                                        }
+                                        writeData(user, context)
+                                    },
+                                    modifier = Modifier.align(Alignment.TopEnd)
+                                ) {
+                                    Icon(
+                                        imageVector = if (selectedProduct.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                                        contentDescription = "Favorite",
+                                        tint = if (selectedProduct.isFavorite) Red else Black,
+                                        modifier = Modifier
+                                            .size(36.dp, 36.dp)
+                                            .padding(end = 12.dp, top = 12.dp)
+                                    )
+                                }
+                                Row(
+                                    modifier = Modifier
+                                        .width(60.dp)
+                                        .background(color = White)
+                                        .padding(start = 20.dp, bottom = 12.dp)
+                                        .align(Alignment.BottomStart),
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "${selectedProduct.rating}",
+                                        fontSize = 13.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Black
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Filled.Star,
+                                        contentDescription = "Rating Star",
+                                        tint = ForestGreen,
+                                        modifier = Modifier
+                                            .size(16.dp, 16.dp)
+                                    )
+                                }
+                            }
                         )
+                        Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "${selectedProduct.discount}%",
-                            fontSize = 19.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = ForestGreen
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "₹${selectedProduct.mrp}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 19.sp,
-                            textDecoration = TextDecoration.LineThrough,
-                            color = GreyWhite
-                        )
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "₹${selectedProduct.originalPrice}",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 19.sp,
+                            text = "${stringResource(R.string.quantity)} : ${selectedProduct.unit}",
+                            fontWeight = FontWeight.Medium,
                             color = Black
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = selectedProduct.name,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Black
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = selectedProduct.bigDescription,
+                            color = Black
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ArrowDownward,
+                                contentDescription = "ArrowDown",
+                                tint = ForestGreen,
+                                modifier = Modifier.size(28.dp, 28.dp)
+                            )
+                            Text(
+                                text = "${selectedProduct.discount}%",
+                                fontSize = 19.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = ForestGreen
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "₹${selectedProduct.mrp}",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 19.sp,
+                                textDecoration = TextDecoration.LineThrough,
+                                color = GreyWhite
+                            )
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text(
+                                text = "₹${selectedProduct.originalPrice}",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 19.sp,
+                                color = Black
+                            )
+                        }
                     }
                 }
             }
-        }
-    )
+        )
+    } else {
+        Toast.makeText(context, "Product is no Longer Exist", Toast.LENGTH_SHORT).show()
+    }
 }

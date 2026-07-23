@@ -49,7 +49,7 @@ import com.biopic.freshcart.ui.theme.RoyalBlue
 import com.biopic.freshcart.ui.theme.White
 
 @Composable
-fun LogInScreen(navController: NavController) {
+fun LogInScreen(navController: NavController, user : User) {
     val emailText = remember {
         mutableStateOf("")
     }
@@ -65,7 +65,6 @@ fun LogInScreen(navController: NavController) {
 
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    val user = readData(context) // Read data from the local storage about user
 
     val validEmail = isValidEmail(emailText.value)
     val validPassword = isValidPassword(passwordText.value)

@@ -21,7 +21,7 @@ import com.biopic.freshcart.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(name : String, topBarBehavior : TopAppBarScrollBehavior) {
+fun HomeScreen(name: String, topBarBehavior: TopAppBarScrollBehavior) {
     TopAppBar(
         title = {
             Row(

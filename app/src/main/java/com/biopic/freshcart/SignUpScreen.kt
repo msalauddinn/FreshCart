@@ -46,7 +46,7 @@ import com.biopic.freshcart.ui.theme.Red
 import com.biopic.freshcart.ui.theme.White
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(navController: NavController, user : User) {
     val nameText = remember {
         mutableStateOf("")
     }
@@ -280,7 +280,9 @@ fun SignUpScreen(navController: NavController) {
                 val invalid = !validName || !validEmail || !validPassword
                 if (invalid) Toast.makeText(context, errorToast, Toast.LENGTH_SHORT).show()
                 if (valid) {
-                    val user = User(nameText.value, emailText.value, passwordText.value)
+                    user.name = nameText.value
+                    user.email = emailText.value
+                    user.password = passwordText.value
                     writeData(user, context)
                     navController.popBackStack()
                     Toast.makeText(context, confirmToast, Toast.LENGTH_SHORT).show()

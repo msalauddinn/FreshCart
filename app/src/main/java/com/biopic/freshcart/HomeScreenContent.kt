@@ -36,7 +36,13 @@ import com.biopic.freshcart.ui.theme.Grey
 import com.biopic.freshcart.ui.theme.White
 
 @Composable
-fun HomeScreenContent(navController : NavController, productList : SnapshotStateList<Product>, paddingValues : PaddingValues, currentScreen : MutableState<String>) {
+fun HomeScreenContent(
+    navController: NavController,
+    productList: SnapshotStateList<Product>,
+    paddingValues: PaddingValues,
+    currentScreen: MutableState<String>,
+    user : User
+) {
     val searchText = remember {
         mutableStateOf("")
     }
@@ -49,6 +55,20 @@ fun HomeScreenContent(navController : NavController, productList : SnapshotState
 
     val focusManager = LocalFocusManager.current
     val displayList = if (isSearchClicked.value) filterProductList else productList
+
+    for ((productId, quantity) in user.cartItems) {
+        val product = productList.find{product -> product.id == productId}
+        if (product != null) {
+            product.isAddedCart = true
+            product.itemCount = quantity
+        }
+    }
+    for (productId in user.favoriteProducts) {
+        val product = productList.find { product -> product.id == productId }
+        if (product != null) {
+            product.isFavorite = true
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -95,7 +115,7 @@ fun HomeScreenContent(navController : NavController, productList : SnapshotState
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp, top = 12.dp)
-                .onFocusChanged{ focusState ->
+                .onFocusChanged { focusState ->
                     isSearchClicked.value = focusState.isFocused
                 },
             singleLine = true,
@@ -112,7 +132,7 @@ fun HomeScreenContent(navController : NavController, productList : SnapshotState
                 count = displayList.count(),
                 itemContent = { index ->
                     val displayProduct = displayList[index]
-                    ProductCard(navController, displayProduct, currentScreen)
+                    ProductCard(navController, displayProduct, currentScreen, user)
                 }
             )
         }

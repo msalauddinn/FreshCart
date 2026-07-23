@@ -25,4 +25,5 @@
     <string name="add_cart">Add to cart</string>
     <string name="go_cart">Go to cart</string>
     <string name="buy">Buy at</string>
+    <string name="category">Category</string>
 </resources>

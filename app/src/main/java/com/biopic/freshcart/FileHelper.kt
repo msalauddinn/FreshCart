@@ -23,7 +23,7 @@ fun readData(context: Context) : User {
         user = ois.readObject() as User
         ois.close()
     } catch (e : FileNotFoundException) {
-        return User("", "", "")
+        return User()
     }
 
     return user

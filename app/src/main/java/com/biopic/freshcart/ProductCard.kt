@@ -53,8 +53,14 @@ import com.biopic.freshcart.ui.theme.Red
 import com.biopic.freshcart.ui.theme.White
 
 @Composable
-fun ProductCard(navController: NavController, product : Product, currentScreen : MutableState<String>) {
+fun ProductCard(
+    navController: NavController,
+    product: Product,
+    currentScreen: MutableState<String>,
+    user : User
+) {
     val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .padding(end = 8.dp, top = 8.dp),
@@ -220,7 +226,7 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
                                 modifier = Modifier
                                     .size(32.dp, 24.dp),
                                 onClick = {
-                                    if (product.itemCount < 10 ) ++product.itemCount
+                                    if (product.itemCount < 10) ++product.itemCount
                                 }
                             ) {
                                 Icon(
@@ -236,14 +242,16 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
                                 if (!product.isAddedCart) {
                                     if (product.stock >= product.itemCount) {
                                         product.isAddedCart = true
-                                        product.stock -= product.itemCount
+                                        user.cartItems[product.id] = product.itemCount
+                                        writeData(user, context)
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Only ${product.stock} ${product.name} remains",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                    else {
-                                        Toast.makeText(context, "Only ${product.stock} ${product.name} remains",
-                                            Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-                                else {
+                                } else {
                                     currentScreen.value = "CART"
                                 }
                             }
@@ -256,8 +264,7 @@ fun ProductCard(navController: NavController, product : Product, currentScreen :
                             )
                         }
                     }
-                }
-                else {
+                } else {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
