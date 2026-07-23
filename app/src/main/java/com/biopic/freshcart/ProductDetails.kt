@@ -61,13 +61,16 @@ import com.biopic.freshcart.ui.theme.White
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetails(navController: NavController, productList: SnapshotStateList<Product>, id: Int, user : User) {
+    // which product is clicked
     val selectedProduct = productList.find { product ->
         product.id == id
     }
     val context = LocalContext.current
 
+    // if selected product is not null
     if (selectedProduct != null) {
         Scaffold(
+            // Top Bar of Product Details page
             topBar = {
                 TopAppBar(
                     modifier = Modifier.border(1.dp, Gray30),
@@ -77,6 +80,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
 
                         navigationIconContentColor = Black
                     ),
+                    // Arrow Back Icon
                     navigationIcon = {
                         IconButton(
                             onClick = {
@@ -91,6 +95,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                             )
                         }
                     },
+                    // Title
                     title = {
                         Text(
                             text = stringResource(R.string.product_details),
@@ -101,6 +106,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                     }
                 )
             },
+            // Bottom Bar or Bottom Buttons
             bottomBar = {
                 BottomAppBar(
                     containerColor = White,
@@ -113,6 +119,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                         horizontalArrangement = Arrangement.SpaceEvenly,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // Add to cart or Go to cart Button
                         Button(
                             onClick = {
 
@@ -135,6 +142,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                                 textAlign = TextAlign.Center
                             )
                         }
+                        // Buy button
                         Button(
                             onClick = {
 
@@ -170,6 +178,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                             .fillMaxWidth()
                             .padding(top = 28.dp, start = 54.dp, end = 54.dp)
                     ) {
+                        // Image Box
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -177,6 +186,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                                 .clip(shape = RoundedCornerShape(10.dp))
                                 .border(1.dp, Black, RoundedCornerShape(10.dp)),
                             content = {
+                                // Product Image
                                 Image(
                                     painter = painterResource(selectedProduct.image),
                                     contentDescription = selectedProduct.name,
@@ -186,12 +196,16 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                                     contentScale = ContentScale.Fit,
                                     alignment = Alignment.Center
                                 )
+                                // Favorite Icon
                                 IconButton(
                                     onClick = {
+                                        // if favorite is true then click again make unFavorite and if false then make favorite
                                         selectedProduct.isFavorite = !selectedProduct.isFavorite
+                                        // if selected product is favorite then add and store at the local file
                                         if (selectedProduct.isFavorite) {
                                             user.favoriteProducts.add(selectedProduct.id)
                                         }
+                                        // if not then remove from list and store at the local file
                                         else {
                                             user.favoriteProducts.remove(selectedProduct.id)
                                         }
@@ -208,6 +222,7 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                                             .padding(end = 12.dp, top = 12.dp)
                                     )
                                 }
+                                // Rating Text
                                 Row(
                                     modifier = Modifier
                                         .width(60.dp)
@@ -234,12 +249,14 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                             }
                         )
                         Spacer(modifier = Modifier.height(12.dp))
+                        // Quantity of product
                         Text(
                             text = "${stringResource(R.string.quantity)} : ${selectedProduct.unit}",
                             fontWeight = FontWeight.Medium,
                             color = Black
                         )
                         Spacer(modifier = Modifier.height(8.dp))
+                        // Product name
                         Text(
                             text = selectedProduct.name,
                             fontSize = 18.sp,
@@ -247,11 +264,13 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                             color = Black
                         )
                         Spacer(modifier = Modifier.height(8.dp))
+                        // Product brief description
                         Text(
                             text = selectedProduct.bigDescription,
                             color = Black
                         )
                         Spacer(modifier = Modifier.height(20.dp))
+                        // Price Text
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -287,7 +306,8 @@ fun ProductDetails(navController: NavController, productList: SnapshotStateList<
                 }
             }
         )
-    } else {
+    }
+    else {
         Toast.makeText(context, "Product is no Longer Exist", Toast.LENGTH_SHORT).show()
     }
 }

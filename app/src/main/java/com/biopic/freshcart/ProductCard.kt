@@ -61,6 +61,7 @@ fun ProductCard(
 ) {
     val context = LocalContext.current
 
+    // Outside Card
     Card(
         modifier = Modifier
             .padding(end = 8.dp, top = 8.dp),
@@ -79,6 +80,7 @@ fun ProductCard(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
+                // Image Card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -89,6 +91,7 @@ fun ProductCard(
                     border = BorderStroke(1.dp, Gray30),
                     shape = RoundedCornerShape(7.dp),
                     content = {
+                        // Image Box
                         Box(
                             modifier = Modifier
                                 .align(Alignment.CenterHorizontally),
@@ -106,6 +109,7 @@ fun ProductCard(
                                         alignment = Alignment.Center,
                                     )
                                 }
+                                // Rating Text
                                 Row(
                                     modifier = Modifier
                                         .align(Alignment.BottomStart)
@@ -132,17 +136,20 @@ fun ProductCard(
                         )
                     }
                 )
+                // Quantity Text
                 Text(
                     text = "${stringResource(R.string.quantity)} : ${product.unit}",
                     fontSize = 11.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
+                // Product name Text
                 Text(
                     text = product.name,
                     fontWeight = FontWeight.Medium
                 )
                 Spacer(modifier = Modifier.height(4.dp))
+                // Product description Text
                 Text(
                     text = product.smallDescription,
                     fontSize = 13.sp,
@@ -151,6 +158,7 @@ fun ProductCard(
                     lineHeight = 16.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
+                // Price Text
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -182,6 +190,7 @@ fun ProductCard(
                     )
                 }
                 Spacer(modifier = Modifier.height(4.dp))
+                // if product is in stock then do
                 if (product.stock > 0) {
                     Row(
                         modifier = Modifier
@@ -190,6 +199,7 @@ fun ProductCard(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        // Quantity increase-decrease
                         Row(
                             modifier = Modifier
                                 .width(100.dp)
@@ -203,6 +213,7 @@ fun ProductCard(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            // Decreasing Icon
                             IconButton(
                                 modifier = Modifier
                                     .size(32.dp, 24.dp),
@@ -216,12 +227,14 @@ fun ProductCard(
                                     modifier = Modifier.size(16.dp, 16.dp)
                                 )
                             }
+                            // Showing the How many decrease or increase
                             Text(
                                 text = "${product.itemCount}",
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium,
                                 textAlign = TextAlign.Center
                             )
+                            // Increase Icon
                             IconButton(
                                 modifier = Modifier
                                     .size(32.dp, 24.dp),
@@ -237,21 +250,29 @@ fun ProductCard(
                                 )
                             }
                         }
+                        // Add Shopping Cart Icon
                         IconButton(
                             onClick = {
+                                // if product is not added to cart
                                 if (!product.isAddedCart) {
+                                    // if stock is greater than or equal to
                                     if (product.stock >= product.itemCount) {
                                         product.isAddedCart = true
                                         user.cartItems[product.id] = product.itemCount
                                         writeData(user, context)
-                                    } else {
+                                        Toast.makeText(context, "Added in Cart Successfully", Toast.LENGTH_SHORT).show()
+                                    }
+                                    // if stock is less than
+                                    else {
                                         Toast.makeText(
                                             context,
                                             "Only ${product.stock} ${product.name} remains",
                                             Toast.LENGTH_SHORT
                                         ).show()
                                     }
-                                } else {
+                                }
+                                // if product is added to cart then
+                                else {
                                     currentScreen.value = "CART"
                                 }
                             }
@@ -264,7 +285,9 @@ fun ProductCard(
                             )
                         }
                     }
-                } else {
+                }
+                // if product is not stock then show Out of stock
+                else {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),

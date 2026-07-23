@@ -38,10 +38,12 @@ fun CategoryScreenContent(
     paddingValues: PaddingValues
 ) {
 
+    // All categories list
     val categoryList = productList.map { product ->
         product.category
     }.distinct()
 
+    // Showing category name
     LazyVerticalGrid(
         modifier = Modifier
             .padding(paddingValues)
@@ -53,6 +55,7 @@ fun CategoryScreenContent(
             count = categoryList.count(),
             itemContent = { index ->
                 val category = categoryList[index]
+                // Outside Card
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -74,6 +77,7 @@ fun CategoryScreenContent(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        // Image Card
                         Card(
                             modifier = Modifier.padding(vertical = 8.dp),
                             colors = CardDefaults.cardColors(
@@ -91,6 +95,7 @@ fun CategoryScreenContent(
                                     .size(160.dp, 160.dp)
                             )
                         }
+                        // Category name
                         Text(
                             text = category,
                             fontWeight = FontWeight.SemiBold,

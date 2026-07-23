@@ -6,6 +6,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,17 +19,19 @@ import com.biopic.freshcart.ui.theme.White
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryScreen() {
+fun TopBar(title : String) {
+    // All Screen top bar
     TopAppBar(
         modifier = Modifier
             .border(1.dp, Gray30),
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = White,
-            titleContentColor = Black
+            titleContentColor = Black,
+            scrolledContainerColor = White
         ),
         title = {
             Text(
-                text = stringResource(R.string.category),
+                text = title,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier

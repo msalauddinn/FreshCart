@@ -43,6 +43,7 @@ fun CategoryProductScreen(
         containerColor = White,
         modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
         topBar = {
+            // Top Bar of each Category Products
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = White,
@@ -51,6 +52,7 @@ fun CategoryProductScreen(
                 ),
                 scrollBehavior = topAppBarScrollBehavior,
                 navigationIcon = {
+                    // Arrow Back Icon
                     IconButton(
                         onClick = {
                             navController.popBackStack()
@@ -76,6 +78,7 @@ fun CategoryProductScreen(
             )
         },
         content = { paddingValues ->
+            // Content of this page, Reuse of HomeScreenContent
             HomeScreenContent(navController, productList = categoryProductList, paddingValues, currentScreen, user)
         }
     )

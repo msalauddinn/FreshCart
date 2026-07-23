@@ -56,6 +56,7 @@ fun HomeScreenContent(
     val focusManager = LocalFocusManager.current
     val displayList = if (isSearchClicked.value) filterProductList else productList
 
+    // checking that is the product is in Cart or not
     for ((productId, quantity) in user.cartItems) {
         val product = productList.find{product -> product.id == productId}
         if (product != null) {
@@ -63,6 +64,7 @@ fun HomeScreenContent(
             product.itemCount = quantity
         }
     }
+    // Checking Product is Favorite or not
     for (productId in user.favoriteProducts) {
         val product = productList.find { product -> product.id == productId }
         if (product != null) {
@@ -81,6 +83,7 @@ fun HomeScreenContent(
                 }
             }
     ) {
+        // Search Bar
         OutlinedTextField(
             value = searchText.value,
             onValueChange = { text ->
@@ -124,6 +127,7 @@ fun HomeScreenContent(
                 onSearch = { focusManager.clearFocus() }
             )
         )
+        // Products
         LazyVerticalGrid(
             modifier = Modifier.padding(start = 8.dp),
             columns = GridCells.Adaptive(212.dp),

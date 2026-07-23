@@ -27,6 +27,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.biopic.freshcart.ui.theme.Black
@@ -50,6 +51,10 @@ fun MainScreen(
     val isCart = currentScreen.value == "CART"
     val iconSize = 32.dp
 
+    val categoryText = stringResource(R.string.category)
+    val accountDetails = stringResource(R.string.account_details)
+    val myCart = stringResource(R.string.myCart)
+
     Scaffold(
         containerColor = White,
         modifier = Modifier.nestedScroll(topBarBehavior.nestedScrollConnection),
@@ -59,10 +64,17 @@ fun MainScreen(
                     HomeScreen(user.name, topBarBehavior)
                 }
                 "CATEGORY" -> {
-                    CategoryScreen()
+                    TopBar(categoryText)
+                }
+                "ACCOUNT" -> {
+                    AccountScreen(accountDetails)
+                }
+                "CART" -> {
+                    TopBar(myCart)
                 }
             }
         },
+        // Bottom Navigation Bar
         bottomBar = {
             BottomAppBar(
                 containerColor = White,
@@ -75,6 +87,7 @@ fun MainScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
+                    // Home Icon
                     IconButton(
                         onClick = {
                             currentScreen.value = "HOME"
@@ -88,6 +101,7 @@ fun MainScreen(
                                 .size(iconSize, iconSize)
                         )
                     }
+                    // Category Icon
                     IconButton(
                         onClick = {
                             currentScreen.value = "CATEGORY"
@@ -101,6 +115,7 @@ fun MainScreen(
                                 .size(iconSize, iconSize)
                         )
                     }
+                    // Account Icon
                     IconButton(
                         onClick = {
                             currentScreen.value = "ACCOUNT"
@@ -114,6 +129,7 @@ fun MainScreen(
                                 .size(iconSize, iconSize)
                         )
                     }
+                    // Cart Icon
                     IconButton(
                         onClick = {
                             currentScreen.value = "CART"
@@ -130,6 +146,7 @@ fun MainScreen(
                 }
             }
         },
+        // Content of Scaffold
         content = { paddingValues ->
             if (isHome) HomeScreenContent(navController, productList, paddingValues, currentScreen, user)
             if (isCategory) CategoryScreenContent(navController, productList, paddingValues)
